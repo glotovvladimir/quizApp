@@ -32,7 +32,7 @@ public class SimpleController {
     @PostMapping("/")
     public String questionsPage(@ModelAttribute("amount") String amount, Model model) {
         model.addAttribute("questions", quizService.getQuestionListWithParameter(amount));
-        model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.valueOf(amount)));
+        model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.parseInt(amount)));
         return "questionsPage";
     }
 

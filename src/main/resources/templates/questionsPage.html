@@ -11,28 +11,26 @@
 <form action="#"
       th:action="@{/questions}"
       th:object="${answersData}" method="post">
-    
+
     <tr th:each="i: ${#numbers.sequence(0, questions.size() - 1)}">
         <fieldset id="fieldSet">
-            <p th:text="${questions.get(i).question}"/><br>
+            <p th:text="${questions.get(i).question}"/>
             <ul th:each="answer : ${questions.get(i).incorrect_answers}">
-                <li>
-                    <input type="radio"
-                           th:value="${answer}"
-                           th:field="*{answerList['__${i}__']}">
-                    
-                    <label th:text="${answer}"
-                           th:for="*{answerList['__${i}__']}"></label>
-                </li>
+                <input th:field="*{answerList['__${i}__']}"
+                       th:value="${answer}"
+                       type="radio">
+
+                <label th:for="*{answerList['__${i}__']}"
+                       th:text="${answer}"></label>
             </ul>
             <br>
         </fieldset>
     </tr>
     <p>
-        <input type="submit" 
-              value="Submit"/> 
-        
-        <input type="reset" 
+        <input type="submit"
+               value="Submit"/>
+
+        <input type="reset"
                value="Reset"/>
     </p>
 </form>
