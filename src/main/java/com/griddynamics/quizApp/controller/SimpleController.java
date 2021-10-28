@@ -1,13 +1,15 @@
 package com.griddynamics.quizApp.controller;
 
-import com.griddynamics.quizApp.model.PlayerData;
 import com.griddynamics.quizApp.model.AnswersData;
+import com.griddynamics.quizApp.model.PlayerData;
 import com.griddynamics.quizApp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.HashMap;
 
@@ -30,7 +32,7 @@ public class SimpleController {
     @PostMapping("/")
     public String questionsPage(@ModelAttribute("amount") String amount, Model model) {
         model.addAttribute("questions", quizService.getQuestionListWithParameter(amount));
-        model.addAttribute("answersData", new AnswersData());
+        model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.valueOf(amount)));
         return "questionsPage";
     }
 

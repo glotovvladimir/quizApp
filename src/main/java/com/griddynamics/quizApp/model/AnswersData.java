@@ -10,7 +10,11 @@ public class AnswersData {
 
     Map<String, String> answerList = new HashMap<>();
     
-//    public AnswersData(Map<String, String> answers) {
-//       this.answerList = answers;
-//    }
+    public AnswersData(Map<String, String> answers, int i) {
+       this.answerList = answers;
+       
+        for (int j = 0; j < i; j++) {
+            answers.put(String.valueOf(j), null);
+        }
+    }
 }

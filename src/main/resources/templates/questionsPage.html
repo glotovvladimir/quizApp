@@ -9,13 +9,13 @@
     <h1>Ready? Steady.. Go!</h1><br>
     
     <form action="#" th:action="@{/questions}" th:object="${answersData}" method="post">
-        <tr th:each="question : ${questions}">
+        <tr th:each="i: ${#numbers.sequence(0, questions.size() - 1)}">
             <fieldset id="fieldSet">
-                <p th:text="${question.question}"/><br>
-                <ul th:each="entry : ${answersData.answerList.entrySet()}">
-                    <li th:each="answer : ${question.incorrect_answers}" >
-                        <input type="radio" th:value="${answer}" th:field="*{answerList['__${answerList.key}__']}">
-                        <label th:text="${answer}"  th:for="*{answerList['__${answerList.key}__']}"></label>
+                <p th:text="${questions.get(i).question}"/><br>
+                <ul th:each="answer : ${questions.get(i).incorrect_answers}">
+                    <li>
+                        <input type="radio" th:value="${answer}" th:field="*{answerList['__${i}__']}">
+                        <label th:text="${answer}"  th:for="*{answerList['__${i}__']}"></label>
                     </li>
                 </ul><br>
             </fieldset>
