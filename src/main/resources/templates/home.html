@@ -2,15 +2,31 @@
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Home page</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-    <h1>Hello !</h1>
-    <p>Welcome to <span th:text="${appName}"/></p>
-    <p>Please enter amount of questions for Quiz</p>
-    <form th:action="@{/}" th:object="${amount}" method="post">
-        <input type="text" id="amount1" name="amount2" th:field="*{amount}" placeholder="Enter amount"><br><br>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-    </form>
+<h1>Hello !</h1>
+<p>Welcome to <span th:text="${appName}"/></p>
+
+<p>Please enter amount of questions for Quiz</p>
+
+<form th:action="@{/}"
+      th:object="${amount}"
+      method="post">
+
+    <input type="text"
+           id="amount1"
+           name="amount2"
+           th:field="*{amount}"
+           placeholder="Enter amount"><br><br>
+
+    <p>
+        <input type="submit"
+               value="Submit"/>
+
+        <input type="reset"
+               value="Reset"/>
+    </p>
+</form>
 </body>
 </html>

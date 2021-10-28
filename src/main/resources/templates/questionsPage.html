@@ -1,26 +1,40 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Handling Form Submission</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Questions</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-    <br>
-    <h1>Ready? Steady.. Go!</h1><br>
+<br>
+<h1>Ready? Steady.. Go!</h1><br>
+
+<form action="#"
+      th:action="@{/questions}"
+      th:object="${answersData}" method="post">
     
-    <form action="#" th:action="@{/questions}" th:object="${answersData}" method="post">
-        <tr th:each="i: ${#numbers.sequence(0, questions.size() - 1)}">
-            <fieldset id="fieldSet">
-                <p th:text="${questions.get(i).question}"/><br>
-                <ul th:each="answer : ${questions.get(i).incorrect_answers}">
-                    <li>
-                        <input type="radio" th:value="${answer}" th:field="*{answerList['__${i}__']}">
-                        <label th:text="${answer}"  th:for="*{answerList['__${i}__']}"></label>
-                    </li>
-                </ul><br>
-            </fieldset>
-        </tr>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-    </form>
+    <tr th:each="i: ${#numbers.sequence(0, questions.size() - 1)}">
+        <fieldset id="fieldSet">
+            <p th:text="${questions.get(i).question}"/><br>
+            <ul th:each="answer : ${questions.get(i).incorrect_answers}">
+                <li>
+                    <input type="radio"
+                           th:value="${answer}"
+                           th:field="*{answerList['__${i}__']}">
+                    
+                    <label th:text="${answer}"
+                           th:for="*{answerList['__${i}__']}"></label>
+                </li>
+            </ul>
+            <br>
+        </fieldset>
+    </tr>
+    <p>
+        <input type="submit" 
+              value="Submit"/> 
+        
+        <input type="reset" 
+               value="Reset"/>
+    </p>
+</form>
 </body>
 </html>
