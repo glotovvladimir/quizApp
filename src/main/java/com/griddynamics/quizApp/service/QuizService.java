@@ -1,7 +1,6 @@
 package com.griddynamics.quizApp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.griddynamics.quizApp.model.Question;
 import com.griddynamics.quizApp.model.QuestionResponse;
 import feign.Feign;
@@ -12,10 +11,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -80,5 +81,28 @@ public class QuizService {
             Collections.shuffle(list);
             question.setIncorrect_answers(list.toArray(new String[0]));
         }
+    }
+
+    public ArrayList<String> extractAnswers(MultiValueMap<String, String> answersData) {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (Map.Entry<String, List<String>> answer: answersData.entrySet()) {
+            result.add(answer.getValue().get(0));
+        }
+        return result;
+    }
+
+    public int[] calculateCorrectAnswers(MultiValueMap<String, String> answersData) {
+        int i = 0;
+        int[] results = new int[2];
+        ArrayList<String> givenAnswersList = extractAnswers(answersData);
+        List<String> correctAnswersList = questionsInUse.stream().map(q -> q.getCorrect_answer()).collect(Collectors.toList());
+
+        for (int j = 0; j < givenAnswersList.size() - 1; j++) {
+            if (givenAnswersList.get(j).equals(correctAnswersList.get(j))) i++;
+        }
+        results[0] = i;
+        results[1] = givenAnswersList.size();
+        return results;
     }
 }

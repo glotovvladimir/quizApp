@@ -8,7 +8,7 @@ import java.util.Map;
 public class AnswersData {
 
     Map<Integer, String> answerList;
-    
+
     public AnswersData(Map<Integer, String> answers, int i) {
        this.answerList = answers;
        

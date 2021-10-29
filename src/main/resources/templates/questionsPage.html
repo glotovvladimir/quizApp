@@ -14,7 +14,7 @@
 
     <tr th:each="i: ${#numbers.sequence(0, questions.size() - 1)}">
         <fieldset id="fieldSet">
-            <p th:text="${questions.get(i).question}"/>
+            <p th:text="${questions.get(i).question}"></p>
             <ul th:each="answer : ${questions.get(i).incorrect_answers}">
                 <input th:field="*{answerList['__${i}__']}"
                        th:value="${answer}"
