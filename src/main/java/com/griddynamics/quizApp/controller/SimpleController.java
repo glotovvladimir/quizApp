@@ -23,24 +23,27 @@ public class SimpleController {
     
     @Autowired
     private QuizService quizService;
+    private String playerName;
 
     @GetMapping("/")
     public String homePage(Model model) {
         model.addAttribute("appName", appName);
-        model.addAttribute("amount", new PlayerData());
+        model.addAttribute("info", new PlayerData());
         return "home";
     }
     
     @PostMapping("/")
-    public String questionsPage(@ModelAttribute("amount") String amount, Model model) {
-        model.addAttribute("questions", quizService.getQuestionListWithParameter(amount));
-        model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.parseInt(amount)));
+    public String questionsPage(@ModelAttribute("amount") PlayerData info, Model model) {
+        model.addAttribute("questions", quizService.getQuestionListWithParameter(info.getAmount()));
+        model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.parseInt(info.getAmount())));
+        playerName = info.getName();
         return "questionsPage";
     }
     
     @PostMapping("/questions")
     public String resultsPage(@RequestBody MultiValueMap<String, String> answersData, Model model) {
         model.addAttribute("score", quizService.calculateCorrectAnswers(answersData));
+        model.addAttribute("name", playerName);
         return "resultsPage";
     }
 }

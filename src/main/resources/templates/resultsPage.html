@@ -4,9 +4,14 @@
     <title>Answers</title>
 </head>
 <body>
-    <h2>Your correct answers are</h2>
+    <h2>Results for</h2>
+    <h2 th:text="${name}"></h2>
     <h2 th:text="${score[0]}"></h2>
     <h2>out of</h2>
     <h2 th:text="${score[1]}"></h2>
+    <h3>This is</h3>
+    <h3 th:text="${score[2]}"></h3>
+    <h3>percents</h3>
+
 </body>
 </html>

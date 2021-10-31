@@ -92,9 +92,9 @@ public class QuizService {
         return result;
     }
 
-    public int[] calculateCorrectAnswers(MultiValueMap<String, String> answersData) {
-        int i = 0;
-        int[] results = new int[2];
+    public double[] calculateCorrectAnswers(MultiValueMap<String, String> answersData) {
+        double i = 0;
+        double[] results = new double[3];
         ArrayList<String> givenAnswersList = extractAnswers(answersData);
         List<String> correctAnswersList = questionsInUse.stream().map(q -> q.getCorrect_answer()).collect(Collectors.toList());
 
@@ -103,6 +103,7 @@ public class QuizService {
         }
         results[0] = i;
         results[1] = givenAnswersList.size();
+        results[2] = i / results[1];
         return results;
     }
 }

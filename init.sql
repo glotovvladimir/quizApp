@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS quiz_app;
+USE quiz_app;
+CREATE TABLE IF NOT EXISTS results (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    player_name VARCHAR(255) NOT NULL,
+    player_result DOUBLE 
+);

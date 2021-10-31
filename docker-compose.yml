@@ -1,0 +1,31 @@
+version: '2.4'
+
+services:
+  mysql-docker-container:
+    image: mysql:5.7
+    env_file:
+      - db_variables.env
+    volumes:
+      - /data/mysql
+      - .init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --init-file /data/application/init.sql
+    ports:
+      - 3306:3306
+      
+  quizApp:
+    image: quiz-image
+    build:
+      context: "Quiz application"
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql-docker-container
+    ports:
+      - 8081:8081
+    environment:
+      - MYSQL_HOST=mysql-docker-container
+      - MYSQL_DATABASE=quiz_app
+      - MYSQL_PORT=3306
+    env_file:
+      - db_variables.env
+    volumes:
+      - /data/spring-boot-app

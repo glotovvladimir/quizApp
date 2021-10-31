@@ -11,14 +11,19 @@
 <p>Please enter amount of questions for Quiz</p>
 
 <form th:action="@{/}"
-      th:object="${amount}"
+      th:object="${info}"
       method="post">
 
     <input type="text"
-           id="amount1"
-           name="amount2"
+           id="amount"
+           name="amount"
            th:field="*{amount}"
            placeholder="Enter amount"><br><br>
+    <input type="text"
+           id="name"
+           name="name"
+           th:field="*{name}"
+           placeholder="Enter name"><br><br>
 
     <p>
         <input type="submit"

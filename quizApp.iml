@@ -214,5 +214,6 @@
     <orderEntry type="library" name="Maven: io.qameta.allure:allure-java-commons:2.16.0" level="project" />
     <orderEntry type="library" name="Maven: io.qameta.allure:allure-model:2.16.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: io.qameta.allure:allure-test-filter:2.16.0" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.27" level="project" />
   </component>
 </module>

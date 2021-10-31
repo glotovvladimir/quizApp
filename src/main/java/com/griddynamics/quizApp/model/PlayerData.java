@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlayerData {
     private String amount = "1";
+    private String name = "";
 }
