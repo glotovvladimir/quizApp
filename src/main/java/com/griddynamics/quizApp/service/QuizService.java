@@ -98,9 +98,8 @@ public class QuizService {
         ArrayList<String> givenAnswersList = extractAnswers(answersData);
         List<String> correctAnswersList = questionsInUse.stream().map(q -> q.getCorrect_answer()).collect(Collectors.toList());
 
-        for (int j = 0; j < givenAnswersList.size() - 1; j++) {
+        for (int j = 0; j < givenAnswersList.size() - 1; j++) 
             if (givenAnswersList.get(j).equals(correctAnswersList.get(j))) i++;
-        }
         results[0] = i;
         results[1] = givenAnswersList.size();
         results[2] = i / results[1];

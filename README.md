@@ -1,0 +1,1 @@
+Start project with building in a container: ```docker-compose up --biuld```
