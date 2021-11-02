@@ -1,1 +1,1 @@
-Start project with building in a container: ```docker-compose up --biuld```
+Start project by: ```sh start.sh```
