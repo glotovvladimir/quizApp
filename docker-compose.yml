@@ -3,8 +3,6 @@ version: '1.0'
 services:
   mysql-docker-container:
     image: mysql:5.7
-#    env_file:
-#      - db_variables.env
     volumes:
       - /data/mysql
       - ./sql_scripts:/docker-entrypoint-initdb.d/:ro
@@ -26,8 +24,6 @@ services:
       - MYSQL_HOST=mysql-docker-container
       - MYSQL_DATABASE=quiz_app
       - MYSQL_PORT=3306
-#    env_file:
-#      - db_variables.env
     volumes:
       - /data/spring-boot-app
     tty: true

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerData {
-    private String amount = "1";
+    
+    private String amount = "";
     private String name = "";
 }

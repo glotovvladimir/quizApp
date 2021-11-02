@@ -1,6 +1,7 @@
 package com.griddynamics.quizApp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.griddynamics.quizApp.model.GameRecord;
 import com.griddynamics.quizApp.model.Question;
 import com.griddynamics.quizApp.model.QuestionResponse;
 import feign.Feign;
@@ -10,6 +11,7 @@ import feign.okhttp.OkHttpClient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StreamUtils;
@@ -23,9 +25,13 @@ import java.util.stream.Collectors;
 @Component
 public class QuizService {
     
-    public ArrayList<Question> questionsInUse;
-    
     private final String URL = "https://opentdb.com/api.php";
+    
+    @Autowired
+    DBService dbService;
+    
+    public ArrayList<Question> questionsInUse;
+    double[] currentResults;
     
     @SneakyThrows
     public ArrayList<Question> getQuestionListWithParameter(String amount) {
@@ -40,7 +46,7 @@ public class QuizService {
         responseAsString = StreamUtils
                 .copyToString(questionClient.findWithAmount(parameters).body().asInputStream(), Charset.defaultCharset());
         questionResponse = mapper.readValue(responseAsString, QuestionResponse.class);
-        questionsInUse = reformatQuestions(questionResponse.getResults());
+        setQuestionsInUse(reformatQuestions(questionResponse.getResults()));
         addCorrectAnswerToIncorrectOnes();
         return questionsInUse;
     }
@@ -103,6 +109,17 @@ public class QuizService {
         results[0] = i;
         results[1] = givenAnswersList.size();
         results[2] = i / results[1];
+        setCurrentResults(results);
         return results;
+    }
+    
+    @SneakyThrows
+    public void saveDataToDb(String name) {
+        dbService.saveDataToDb(name, currentResults[2]);
+    }
+
+    @SneakyThrows
+    public List<GameRecord> get5TopGames() {
+        return dbService.getTop5Games();
     }
 }

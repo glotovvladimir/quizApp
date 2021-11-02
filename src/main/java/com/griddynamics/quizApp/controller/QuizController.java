@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.HashMap;
 
 @Controller
-public class SimpleController {
+public class QuizController {
 
     @Value("${spring.application.name}")
     String appName;
     
     @Autowired
     private QuizService quizService;
+    
     private String playerName;
 
     @GetMapping("/")
@@ -34,16 +35,18 @@ public class SimpleController {
     
     @PostMapping("/")
     public String questionsPage(@ModelAttribute("amount") PlayerData info, Model model) {
+        playerName = info.getName();
         model.addAttribute("questions", quizService.getQuestionListWithParameter(info.getAmount()));
         model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.parseInt(info.getAmount())));
-        playerName = info.getName();
         return "questionsPage";
     }
     
     @PostMapping("/questions")
     public String resultsPage(@RequestBody MultiValueMap<String, String> answersData, Model model) {
         model.addAttribute("score", quizService.calculateCorrectAnswers(answersData));
+        quizService.saveDataToDb(playerName);
         model.addAttribute("name", playerName);
+        model.addAttribute("top5", quizService.get5TopGames());
         return "resultsPage";
     }
 }
