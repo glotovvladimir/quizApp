@@ -40,7 +40,6 @@ public class QuizService {
         ObjectMapper mapper = new ObjectMapper();
         QuestionClient questionClient = getQuestionClient(URL);
         Map<String, String> parameters = new LinkedHashMap<>();
-        ArrayList<Question> questions = new ArrayList<>();
 
         parameters.put("amount", amount);
         responseAsString = StreamUtils
@@ -92,9 +91,8 @@ public class QuizService {
     public ArrayList<String> extractAnswers(MultiValueMap<String, String> answersData) {
         ArrayList<String> result = new ArrayList<>();
 
-        for (Map.Entry<String, List<String>> answer: answersData.entrySet()) {
+        for (Map.Entry<String, List<String>> answer: answersData.entrySet())
             result.add(answer.getValue().get(0));
-        }
         return result;
     }
 
