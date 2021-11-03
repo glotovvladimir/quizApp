@@ -1,24 +1,49 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
-<head>
-    <title>Answers</title>
-</head>
-<body>
-    <h2>Results for</h2>
-    <h2 th:text="${name}"></h2>
-    <h2 th:text="${score[0]}"></h2>
-    <h2>out of</h2>
-    <h2 th:text="${score[1]}"></h2>
-    <h3>This is</h3>
-    <h3 th:text="${score[2]}"></h3>
-    <h3>percents</h3>
-    <br>
-
-    <ul th:each="game : ${top5}">
-        <p th:text="${game.getName()}"></p>
-        <p th:text="${game.getScore()}"></p>
+    <head>
+        <title>Quiz results</title>
+        <style>
+            h2 {
+                text-align: center;
+            }
+    
+            table, th, td {
+                border: 1px solid #5d4747;
+                border-collapse: collapse;
+            }
+    
+            table.center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+    
+            td {
+                padding: 0 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Results for</h2>
+        <h2 th:text="${name}"></h2>
+        <h2 th:text="${score[0]}"></h2>
+        <h2>out of</h2>
+        <h2 th:text="${score[1]}"></h2>
         <br>
-    </ul>
-
-</body>
+        
+        <table class="center">
+            <caption>
+                <h3>Best scores:</h3><br>
+            </caption>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Score</th>
+            </tr>
+            <ul th:each="game : ${top5}">
+                <tr>
+                    <td th:text="${game.getName()}"></td>
+                    <td th:text="${game.getScore()}"></td>
+                </tr>
+            </ul>
+        </table>
+    </body>
 </html>
