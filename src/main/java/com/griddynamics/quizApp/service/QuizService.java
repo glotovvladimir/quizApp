@@ -91,7 +91,7 @@ public class QuizService {
             Collections.shuffle(list);
             question.setIncorrect_answers(list.toArray(new String[0]));
         }
-        log.info("Correct answer is added to incorrect answers - INFO level");
+        log.info("Correct answer is added to incorrect answers");
     }
 
     public ArrayList<String> extractAnswers(MultiValueMap<String, String> answersData) {
