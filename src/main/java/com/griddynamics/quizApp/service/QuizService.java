@@ -11,6 +11,8 @@ import feign.okhttp.OkHttpClient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -24,7 +26,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Component
 public class QuizService {
-    
+
+    private Logger log = LogManager.getLogger(QuizService.class);
     private final String URL = "https://opentdb.com/api.php";
     
     @Autowired
@@ -47,6 +50,7 @@ public class QuizService {
         questionResponse = mapper.readValue(responseAsString, QuestionResponse.class);
         setQuestionsInUse(reformatQuestions(questionResponse.getResults()));
         addCorrectAnswerToIncorrectOnes();
+        log.info("Questions are shuffled and saved");
         return questionsInUse;
     }
     
@@ -75,6 +79,7 @@ public class QuizService {
                         .replace("&auml;", "ä");
             }
         }
+        log.info("Question texts are reformed");
         return list;
     }
     
@@ -86,6 +91,7 @@ public class QuizService {
             Collections.shuffle(list);
             question.setIncorrect_answers(list.toArray(new String[0]));
         }
+        log.info("Correct answer is added to incorrect answers - INFO level");
     }
 
     public ArrayList<String> extractAnswers(MultiValueMap<String, String> answersData) {
@@ -102,6 +108,7 @@ public class QuizService {
         ArrayList<String> givenAnswersList = extractAnswers(answersData);
         List<String> correctAnswersList = questionsInUse.stream().map(q -> q.getCorrect_answer()).collect(Collectors.toList());
 
+        log.info("Start of correct answers calculation");
         for (int j = 0; j < givenAnswersList.size() - 1; j++) 
             if (givenAnswersList.get(j).equals(correctAnswersList.get(j))) i++;
         results[0] = i;
@@ -113,11 +120,13 @@ public class QuizService {
     
     @SneakyThrows
     public void saveDataToDb(String name) {
+        log.info("Saving game info into DB");
         dbService.saveDataToDb(name, currentResults[2]);
     }
 
     @SneakyThrows
     public List<GameRecord> get5TopGames() {
+        log.info("Retrieving top 5 game scores from DB");
         return dbService.getTop5Games();
     }
 }

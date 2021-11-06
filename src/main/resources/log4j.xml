@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration>
+    
+    <appender name="roll-by-time-and-size"
+              class="org.apache.log4j.rolling.RollingFileAppender">
+        <rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+            <param name="FileNamePattern"
+                   value="target/log4j/roll-by-time-and-size/app.%d{HH-mm}.%i.log.gz"/>
+        </rollingPolicy>
+        <triggeringPolicy
+                class="org.apache.log4j.rolling.SizeBasedTriggeringPolicy">
+            <param name="MaxFileSize" value="500"/>
+        </triggeringPolicy>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p - %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="log4j.rootLogger" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="roll-by-time-and-size"/>
+    </logger>
+    
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="roll-by-time-and-size"/>
+    </root>
+    
+</log4j:configuration>
