@@ -1,5 +1,3 @@
-version: '1.0'
-
 services:
   mysql-docker-container:
     image: mysql:5.7
@@ -16,6 +14,7 @@ services:
     image: quiz-image:latest
     build:
       dockerfile: Dockerfile
+      context: ""
     depends_on:
       - mysql-docker-container
     ports:
@@ -29,6 +28,11 @@ services:
     tty: true
     networks:
       - quiz-mysql-network
+      
+  jenkins-container:
+    image: jenkins/jenkins
+    ports:
+      - 8080:8080
         
 networks:
     quiz-mysql-network:

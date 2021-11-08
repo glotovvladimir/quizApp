@@ -1,4 +1,4 @@
 #! /bin/bash
 mvn clean package
-docker-compose build
+docker-compose build quizApp
 docker-compose up
