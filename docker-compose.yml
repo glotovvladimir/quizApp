@@ -29,7 +29,7 @@ services:
     networks:
       - quiz-mysql-network
       
-  jenkins-container:
+  jenkins:
     image: jenkins/jenkins
     ports:
       - 8080:8080

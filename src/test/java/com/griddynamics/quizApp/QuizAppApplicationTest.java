@@ -4,7 +4,7 @@ import com.griddynamics.quizApp.service.QuizService;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-public class QuizAppApplicationTests extends BaseTest{
+public class QuizAppApplicationTest extends BaseTest{
 
 	@Test
 	void questionsCanBeLoadedTest() {
