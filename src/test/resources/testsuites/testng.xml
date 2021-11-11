@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Install suite" configfailurepolicy="continue">
-    <test name="Initial tests">
+    <test name="Questions pulling tests">
         <classes>
             <class name="com.griddynamics.quizApp.QuizAppApplicationTest"/>
         </classes>
