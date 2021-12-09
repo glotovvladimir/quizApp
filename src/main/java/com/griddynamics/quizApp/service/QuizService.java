@@ -1,6 +1,7 @@
 package com.griddynamics.quizApp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.griddynamics.quizApp.dataHolder.DataHolder;
 import com.griddynamics.quizApp.model.GameRecord;
 import com.griddynamics.quizApp.model.Question;
 import com.griddynamics.quizApp.model.QuestionResponse;
@@ -27,15 +28,18 @@ import java.util.stream.Collectors;
 @Component
 public class QuizService {
 
-    private Logger log = LogManager.getLogger(QuizService.class);
+    private final Logger log = LogManager.getLogger(QuizService.class);
     private final String URL = "https://opentdb.com/api.php";
     
+    private DBService dbService;
+    private DataHolder dh;
+
     @Autowired
-    DBService dbService;
-    
-    public ArrayList<Question> questionsInUse;
-    double[] currentResults;
-    
+    public QuizService(DBService dbService, DataHolder dh) {
+        this.dbService = dbService;
+        this.dh = dh;
+    }
+
     @SneakyThrows
     public ArrayList<Question> getQuestionListWithParameter(String amount) {
         String responseAsString;
@@ -48,10 +52,10 @@ public class QuizService {
         responseAsString = StreamUtils
                 .copyToString(questionClient.findWithAmount(parameters).body().asInputStream(), Charset.defaultCharset());
         questionResponse = mapper.readValue(responseAsString, QuestionResponse.class);
-        setQuestionsInUse(reformatQuestions(questionResponse.getResults()));
+        dh.setQuestionsInUse(reformatQuestions(questionResponse.getResults()));
         addCorrectAnswerToIncorrectOnes();
         log.info("Questions are shuffled and saved");
-        return questionsInUse;
+        return dh.getQuestionsInUse();
     }
     
     private QuestionClient getQuestionClient(String url) {
@@ -84,7 +88,7 @@ public class QuizService {
     }
     
     public void addCorrectAnswerToIncorrectOnes() {
-        for (Question question : this.questionsInUse) {
+        for (Question question : dh.getQuestionsInUse()) {
             ArrayList<String> list = new ArrayList<>();
             list.add(question.getCorrect_answer());
             list.addAll(Arrays.asList(question.getIncorrect_answers()));
@@ -106,7 +110,7 @@ public class QuizService {
         double i = 0;
         double[] results = new double[3];
         ArrayList<String> givenAnswersList = extractAnswers(answersData);
-        List<String> correctAnswersList = questionsInUse.stream().map(q -> q.getCorrect_answer()).collect(Collectors.toList());
+        List<String> correctAnswersList = dh.getQuestionsInUse().stream().map(q -> q.getCorrect_answer()).collect(Collectors.toList());
 
         log.info("Start of correct answers calculation");
         for (int j = 0; j < givenAnswersList.size() - 1; j++) 
@@ -114,14 +118,14 @@ public class QuizService {
         results[0] = i;
         results[1] = givenAnswersList.size();
         results[2] = i / results[1];
-        setCurrentResults(results);
+        dh.setCurrentResults(results);
         return results;
     }
     
     @SneakyThrows
     public void saveDataToDb(String name) {
         log.info("Saving game info into DB");
-        dbService.saveDataToDb(name, currentResults[2]);
+        dbService.saveDataToDb(name, dh.getCurrentResults()[2]);
     }
 
     @SneakyThrows

@@ -1,5 +1,6 @@
 package com.griddynamics.quizApp.controller;
 
+import com.griddynamics.quizApp.dataHolder.DataHolder;
 import com.griddynamics.quizApp.model.AnswersData;
 import com.griddynamics.quizApp.model.PlayerData;
 import com.griddynamics.quizApp.service.QuizService;
@@ -20,12 +21,15 @@ import java.util.HashMap;
 public class QuizController {
 
     @Value("${spring.application.name}")
-    String appName;
-    
-    @Autowired
+    private String appName;
     private QuizService quizService;
-    
-    private String playerName;
+    private DataHolder dh;
+
+    @Autowired
+    public QuizController(QuizService quizService, DataHolder dh) {
+        this.quizService = quizService;
+        this.dh = dh;
+    }
 
     @GetMapping("/")
     public String homePage(Model model) {
@@ -37,7 +41,7 @@ public class QuizController {
     @PostMapping(path = "/",
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String questionsPage(@ModelAttribute("amount") PlayerData info, Model model) {
-        playerName = info.getName();
+        dh.setPlayerName(info.getName());
         model.addAttribute("questions", quizService.getQuestionListWithParameter(info.getAmount()));
         model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.parseInt(info.getAmount())));
         return "questionsPage";
@@ -47,9 +51,15 @@ public class QuizController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String resultsPage(@RequestBody MultiValueMap<String, String> answersData, Model model) {
         model.addAttribute("score", quizService.calculateCorrectAnswers(answersData));
-        quizService.saveDataToDb(playerName);
-        model.addAttribute("name", playerName);
+        quizService.saveDataToDb(dh.getPlayerName());
+        model.addAttribute("name", dh.getPlayerName());
         model.addAttribute("top5", quizService.get5TopGames());
         return "resultsPage";
+    }
+
+    @GetMapping("/sessionData")
+    public String getSessionData(Model model) {
+        model.addAttribute("currentSession", dh.toString());
+        return "sessionData";
     }
 }
