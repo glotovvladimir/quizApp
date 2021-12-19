@@ -19,16 +19,16 @@ import java.util.HashMap;
 
 @Controller
 public class QuizController {
-
-    @Value("${spring.application.name}")
-    private String appName;
-    private QuizService quizService;
-    private DataHolder dh;
+    
+    final private String appName;
+    final private QuizService quizService;
+    final private DataHolder dh;
 
     @Autowired
-    public QuizController(QuizService quizService, DataHolder dh) {
+    public QuizController(QuizService quizService, DataHolder dh, @Value("${spring.application.name}") String appName) {
         this.quizService = quizService;
         this.dh = dh;
+        this.appName = appName;
     }
 
     @GetMapping("/")
@@ -42,7 +42,8 @@ public class QuizController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String questionsPage(@ModelAttribute("amount") PlayerData info, Model model) {
         dh.setPlayerName(info.getName());
-        model.addAttribute("questions", quizService.getQuestionListWithParameter(info.getAmount()));
+        quizService.generateQuestionListWithParam(info.getAmount());
+        model.addAttribute("questions", dh.getQuestionsInUse());
         model.addAttribute("answersData", new AnswersData(new HashMap<>(), Integer.parseInt(info.getAmount())));
         return "questionsPage";
     }

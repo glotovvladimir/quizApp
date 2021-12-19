@@ -41,7 +41,7 @@ public class QuizService {
     }
 
     @SneakyThrows
-    public ArrayList<Question> getQuestionListWithParameter(String amount) {
+    public void generateQuestionListWithParam(String amount) {
         String responseAsString;
         QuestionResponse questionResponse;
         ObjectMapper mapper = new ObjectMapper();
@@ -55,7 +55,6 @@ public class QuizService {
         dh.setQuestionsInUse(reformatQuestions(questionResponse.getResults()));
         addCorrectAnswerToIncorrectOnes();
         log.info("Questions are shuffled and saved");
-        return dh.getQuestionsInUse();
     }
     
     private QuestionClient getQuestionClient(String url) {
@@ -110,7 +109,8 @@ public class QuizService {
         double i = 0;
         double[] results = new double[3];
         ArrayList<String> givenAnswersList = extractAnswers(answersData);
-        List<String> correctAnswersList = dh.getQuestionsInUse().stream().map(q -> q.getCorrect_answer()).collect(Collectors.toList());
+        List<String> correctAnswersList = dh.getQuestionsInUse().stream()
+                .map(q -> q.getCorrect_answer()).collect(Collectors.toList());
 
         log.info("Start of correct answers calculation");
         for (int j = 0; j < givenAnswersList.size() - 1; j++) 
